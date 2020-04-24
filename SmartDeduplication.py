@@ -4,14 +4,17 @@ import numpy as np
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
+from scipy.spatial.distance import cdist
 from collections import Counter, defaultdict
+from sklearn.decomposition import PCA
 
 restaurant_db_cols = ['Name', 'Address', 'Phone', 'Style']
-restaurant_db = pd.read_csv(r'CompleteRestaurantList.csv', sep=',', names=restaurant_db_cols, encoding="latin-1")
+restaurant_db = pd.read_csv(r'RestaurantTest_Comma.csv', sep=',', names=restaurant_db_cols, encoding="latin-1")
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 
 restaurant_db['Name'] = restaurant_db['Name'].map(lambda x: re.sub(r'\W+', '', x))
+restaurant_db['Address'] = restaurant_db['Address'].map(lambda x: re.sub(r'\W+', '', x))
 restaurant_db['Phone'] = restaurant_db['Phone'].map(lambda x: re.sub(r'\W+', '', x))
 restaurant_db['Style'] = restaurant_db['Style'].map(lambda x: re.sub(r'\W+', '', x))
 
@@ -30,7 +33,7 @@ def convert_frame_to_array(restaurant_db_in):
 
 def create_hash_column(restaurant_db_array_in):
     power_value = 256
-    mod_value = 283  #100003
+    mod_value = 100003
     name_hash = []
     address_hash = []
     phone_hash = []
@@ -66,6 +69,7 @@ def create_hash_column(restaurant_db_array_in):
     restaurant_db['PhoneHash'] = phone_hash
     restaurant_db['StyleHash'] = style_hash
     restaurant_db['DataHash'] = data_hash
+    print(restaurant_db)
     return restaurant_db
 
 
@@ -103,22 +107,26 @@ restaurant_db_graph_normalised = normalise_data(restaurant_db_graph, restaurant_
 print(restaurant_db_graph_normalised)
 #find_number_of_cluster()
 
-
-
+# pca = PCA(n_components=2)
+# restaurant_db_graph_normalised = pca.fit_transform(restaurant_db_graph_normalised)
+# explained_variance = pca.explained_variance_ratio_
+# print("explained_variance")
+# print(explained_variance)
 #Running the Testing file.
 
-Name = 'Arnie Mortons of Chicago'#input("Enter the Name of the restaurant: ")
-Address = '435S.LaCienegaBlvd.LosAngeles'#input("Enter the address : ")
-Phone = '310-246-1501'#input("Enter the phone number: ")
-Style = 'Italian'#input("Enter the style: ")
+Name = 'Arts Deli'#input("Enter the Name of the restaurant: ")
+Address = '12224 Ventura Blvd. Studio City'#input("Enter the address : ")
+Phone = '818-762-1221'#input("Enter the phone number: ")
+Style = 'Delis'#input("Enter the style: ")
 new_restaurant = pd.DataFrame({"Name":[Name], "Address": [Address], "Phone":[Phone],"Style":[Style]})
 new_restaurant['Name'] = new_restaurant['Name'].map(lambda x: re.sub(r'\W+', '', x))
+new_restaurant['Address'] = new_restaurant['Address'].map(lambda x: re.sub(r'\W+', '', x))
 new_restaurant['Phone'] = new_restaurant['Phone'].map(lambda x: re.sub(r'\W+', '', x))
 new_restaurant['Style'] = new_restaurant['Style'].map(lambda x: re.sub(r'\W+', '', x))
 new_restaurant_db_array = convert_frame_to_array(new_restaurant)
 def create_hash_column_test(new_restaurant_in):
     power_value = 256
-    mod_value = 283  #100003
+    mod_value = 100003
     name_hash = []
     address_hash = []
     phone_hash = []
@@ -160,20 +168,34 @@ def create_hash_column_test(new_restaurant_in):
 
 create_hash_column_test(new_restaurant_db_array)
 
-new_restaurant_hash = new_restaurant[['NameHash','AddressHash','PhoneHash','StyleHash']].copy()
+new_restaurant_hash = new_restaurant[['NameHash','AddressHash','PhoneHash','StyleHash']].copy() #,'PhoneHash','StyleHash'
 for columns in new_restaurant_hash.columns:
     new_restaurant_hash[columns] = (new_restaurant[columns]-restaurant_db_graph[columns].min())/(restaurant_db_graph[columns].max()-restaurant_db_graph[columns].min())
 print(restaurant_db_graph_normalised)
 print(new_restaurant_hash)
 
-cluster_labels = KMeans(n_clusters=10).fit(restaurant_db_graph_normalised)
+fig, ax = plt.subplots()
+ax.scatter(restaurant_db['PhoneHash'], restaurant_db['DataHash'])
+ax.set_title('Dataset')
+ax.set_xlabel('PhoneHash')
+ax.set_ylabel('DataHash')
+plt.show()
+
+fig,ax1 = plt.subplots()
+ax1.hist( restaurant_db['DataHash'])
+ax1.set_title('Dataset')
+ax1.set_xlabel('DataHash')
+ax1.set_ylabel('Frequency')
+plt.show()
+
+cluster_labels = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised)
 labels = cluster_labels.labels_
 print(labels)
 predict_label = cluster_labels.predict(new_restaurant_hash)
 print(predict_label)
 
 
-GMM = GaussianMixture(n_components=10,covariance_type='full',max_iter=100, n_init=1, init_params='kmeans').fit(restaurant_db_graph_normalised)#restaurant_db['DataHash'])
+GMM = GaussianMixture(n_components=5,).fit(restaurant_db_graph_normalised)#restaurant_db['DataHash'])max_iter=100, n_init=1, init_params='kmeans'
 print('Converged', GMM.converged_)
 means = GMM.means_
 covariances = GMM.covariances_
