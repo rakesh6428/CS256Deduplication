@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/CS256Deduplication.iml" filepath="$PROJECT_DIR$/.idea/CS256Deduplication.iml" />
       <module fileurl="file://$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/.idea/CS274_MovieRecommender.iml" filepath="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/.idea/CS274_MovieRecommender.iml" />
+      <module fileurl="file://$USER_HOME$/PycharmProjects/SelfLearning/.idea/SelfLearning.iml" filepath="$USER_HOME$/PycharmProjects/SelfLearning/.idea/SelfLearning.iml" />
     </modules>
   </component>
 </project>

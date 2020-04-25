@@ -4,12 +4,13 @@ import numpy as np
 from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
 from sklearn.mixture import GaussianMixture
+from sklearn.cluster import DBSCAN
 from scipy.spatial.distance import cdist
 from collections import Counter, defaultdict
 from sklearn.decomposition import PCA
 
 restaurant_db_cols = ['Name', 'Address', 'Phone', 'Style']
-restaurant_db = pd.read_csv(r'RestaurantTest_Comma.csv', sep=',', names=restaurant_db_cols, encoding="latin-1")
+restaurant_db = pd.read_csv(r'CompleteRestaurantList.csv', sep=',', names=restaurant_db_cols, encoding="latin-1")
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 
 
@@ -69,7 +70,6 @@ def create_hash_column(restaurant_db_array_in):
     restaurant_db['PhoneHash'] = phone_hash
     restaurant_db['StyleHash'] = style_hash
     restaurant_db['DataHash'] = data_hash
-    print(restaurant_db)
     return restaurant_db
 
 
@@ -95,23 +95,94 @@ def find_number_of_cluster():
     plt.show()
 
 
+def find_cluster_indices(cluster_no, cluster_labels):
+    return np.where(cluster_labels == cluster_no)[0]
+
+
+def find_duplicate_percentage(restaurant_db_array_cluster_wise):
+    duplicate_phone = restaurant_db_array_cluster_wise[restaurant_db_array_cluster_wise.duplicated(['PhoneHash'],keep=False)]
+    duplicate_phone = duplicate_phone.sort_values(by=['PhoneHash'])
+    if duplicate_phone.empty:
+        return 0,None
+    else:
+
+        duplicate_address = duplicate_phone[duplicate_phone.duplicated(['AddressHash'],keep = False)]
+        print(len(restaurant_db_cols))
+        if duplicate_address.empty:
+            number_of_matching_columns = 1
+            return number_of_matching_columns,duplicate_phone
+            #print("Total percentage of duplicates in this cluster is: ", (len(duplicate_phone)/len(restaurant_db_array_cluster_wise))*100)
+        else:
+            duplicate_name = duplicate_address[duplicate_address.duplicated(['NameHash'],keep= False)]
+            if duplicate_name.empty:
+                number_of_matching_columns = 2
+                remaining_matched_data = duplicate_phone[duplicate_phone['PhoneHash'].isin(duplicate_address)]
+                print(remaining_matched_data)
+                return number_of_matching_columns, duplicate_address
+                #print("Total percentage of duplicates in this cluster is: ", (len(duplicate_address)/len(restaurant_db_array_cluster_wise))*100)
+            else:
+                duplicate_style = duplicate_name[duplicate_name.duplicated(['StyleHash'],keep= False)]
+                if duplicate_style.empty:
+                    number_of_matching_columns = 3
+                    return number_of_matching_columns, duplicate_name
+                    #print("Total percentage of duplicates in this cluster is: ", (len(duplicate_name))/len(restaurant_db_array_cluster_wise)  *100)
+                else:
+                    number_of_matching_columns = 4
+                    return number_of_matching_columns, duplicate_style
+                    #print("Total percentage of duplicates in this cluster is: ", ( len(duplicate_style)/len(restaurant_db_array_cluster_wise))*100)
+"""
+        print(duplicate_phone)
+        test = restaurant_db_array_cluster_wise['PhoneHash'].isin(duplicate_phone['PhoneHash'])
+        duplicate_address = restaurant_db_array_cluster_wise[test]
+        print(duplicate_address)
+
+        for row in duplicatePhone['PhoneHash']:
+            dupe_rows = duplicatePhone.loc(row)
+            print(dupe_rows)
+
+        start_index = duplicatePhone.index[0]
+        for index,row in duplicatePhone.iterrows():
+            print(index)
+
+            duplicate_index = binarySearch(duplicatePhone['PhoneHash'].drop([start_index,index]),row['PhoneHash'])
+            print(duplicate_index)
+
+def binarySearch(duplicate_frame,value):
+    duplicate_list = duplicate_frame.values.tolist()
+    duplicate_length = len(duplicate_list) - 1
+    start = 0
+    end = duplicate_length
+    while start <= end:
+        mid = (start+end)//2
+        if duplicate_list[mid] == value:
+            return mid
+        if value>duplicate_list[mid]:
+            start = mid+1
+        else:
+            end = mid-1
+    if start>end:
+        return None
+"""
 # Driver code to call the necessary functions
 
 
 restaurant_db_array = convert_frame_to_array(restaurant_db)
 create_hash_column(restaurant_db_array)
-
-restaurant_db_graph = restaurant_db[['NameHash', 'AddressHash', 'PhoneHash', 'StyleHash']].copy()
+restaurant_db_array = convert_frame_to_array(restaurant_db)
+restaurant_db_graph = restaurant_db[['NameHash','AddressHash', 'PhoneHash']].copy() #'NameHash', 'AddressHash', 'PhoneHash', 'StyleHash','DataHash'
 restaurant_db_graph_normalised = restaurant_db_graph.copy()
 restaurant_db_graph_normalised = normalise_data(restaurant_db_graph, restaurant_db_graph_normalised)
-print(restaurant_db_graph_normalised)
+#print(restaurant_db_graph_normalised)
 #find_number_of_cluster()
 
-# pca = PCA(n_components=2)
-# restaurant_db_graph_normalised = pca.fit_transform(restaurant_db_graph_normalised)
-# explained_variance = pca.explained_variance_ratio_
-# print("explained_variance")
-# print(explained_variance)
+"""
+pca = PCA()
+restaurant_db_graph_normalised = pca.fit_transform(restaurant_db_graph_normalised)
+explained_variance = pca.explained_variance_ratio_
+print("explained_variance")
+print(explained_variance)
+"""
+
 #Running the Testing file.
 
 Name = 'Arts Deli'#input("Enter the Name of the restaurant: ")
@@ -168,41 +239,59 @@ def create_hash_column_test(new_restaurant_in):
 
 create_hash_column_test(new_restaurant_db_array)
 
-new_restaurant_hash = new_restaurant[['NameHash','AddressHash','PhoneHash','StyleHash']].copy() #,'PhoneHash','StyleHash'
+new_restaurant_hash = new_restaurant[['NameHash','AddressHash','PhoneHash']].copy() #,'PhoneHash','StyleHash''NameHash','AddressHash','PhoneHash','StyleHash','DataHash'
 for columns in new_restaurant_hash.columns:
     new_restaurant_hash[columns] = (new_restaurant[columns]-restaurant_db_graph[columns].min())/(restaurant_db_graph[columns].max()-restaurant_db_graph[columns].min())
 print(restaurant_db_graph_normalised)
 print(new_restaurant_hash)
+def plot_data():
+    fig, ax = plt.subplots()
+    ax.scatter(restaurant_db['PhoneHash'], restaurant_db['DataHash'])
+    ax.set_title('Dataset')
+    ax.set_xlabel('PhoneHash')
+    ax.set_ylabel('DataHash')
+    plt.show()
 
-fig, ax = plt.subplots()
-ax.scatter(restaurant_db['PhoneHash'], restaurant_db['DataHash'])
-ax.set_title('Dataset')
-ax.set_xlabel('PhoneHash')
-ax.set_ylabel('DataHash')
-plt.show()
+    fig,ax1 = plt.subplots()
+    ax1.hist( restaurant_db['DataHash'])
+    ax1.set_title('Dataset')
+    ax1.set_xlabel('DataHash')
+    ax1.set_ylabel('Frequency')
+    plt.show()
 
-fig,ax1 = plt.subplots()
-ax1.hist( restaurant_db['DataHash'])
-ax1.set_title('Dataset')
-ax1.set_xlabel('DataHash')
-ax1.set_ylabel('Frequency')
-plt.show()
 
 cluster_labels = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised)
 labels = cluster_labels.labels_
 print(labels)
-predict_label = cluster_labels.predict(new_restaurant_hash)
+predict_label = cluster_labels.predict(new_restaurant_hash)#.drop(columns = ['Name', 'Address', 'Phone' , 'Style', 'DataHash']))
 print(predict_label)
+array_frame_cluster = {}
+for cluster in range(cluster_labels.n_clusters):
+    array_frame_cluster[cluster] = pd.DataFrame(restaurant_db_array[(find_cluster_indices(cluster,labels))],columns = ['Name', 'Address', 'Phone' , 'Style','NameHash','AddressHash','PhoneHash','StyleHash','DataHash'])
+for key in array_frame_cluster:
+    matching_columns,duplicate_df_obj = find_duplicate_percentage(array_frame_cluster[key])
+    if matching_columns ==0:
+        print("In Cluster: ",key,"No Matches Found")
+    elif matching_columns == 1:
+        print("In Cluster: ",key," Total % of data matched with other records is: ", round((1/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
+    elif matching_columns == 2:
+        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((2/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
+    elif matching_columns == 3:
+        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((3/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
+    else:
+        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((4 / len(restaurant_db_cols)) * 100),
+              "and % of record that are matched over all is", round((len(duplicate_df_obj) / len(restaurant_db))) * 100)
+        print("The matched records are\n:", duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
 
-
-GMM = GaussianMixture(n_components=5,).fit(restaurant_db_graph_normalised)#restaurant_db['DataHash'])max_iter=100, n_init=1, init_params='kmeans'
+GMM = GaussianMixture(n_components=5).fit(restaurant_db_graph_normalised) #.drop(columns = 'DataHash'))#restaurant_db['DataHash'])max_iter=100, n_init=1, init_params='kmeans'
 print('Converged', GMM.converged_)
 means = GMM.means_
 covariances = GMM.covariances_
-
-Y = np.array([[0.669466], [0.528786], [0.408916], [0.164902]])
-prediction_data = GMM.predict(restaurant_db_graph_normalised)
-prediction = GMM.predict(new_restaurant_hash)
+#print(restaurant_db_graph)
+prediction_data = GMM.predict(restaurant_db_graph_normalised) #.drop(columns = 'DataHash'))
+prediction = GMM.predict(new_restaurant_hash) #.drop(columns = ['Name', 'Address', 'Phone' , 'Style', 'DataHash']))
 print(prediction_data)
 print(prediction)
-
