@@ -9,6 +9,14 @@ from scipy.spatial.distance import cdist
 from collections import Counter, defaultdict
 from sklearn.decomposition import PCA
 
+desired_width=320
+
+pd.set_option('display.width', desired_width)
+
+np.set_printoptions(linewidth=desired_width)
+
+pd.set_option('display.max_columns',10)
+
 restaurant_db_cols = ['Name', 'Address', 'Phone', 'Style']
 restaurant_db = pd.read_csv(r'CompleteRestaurantList.csv', sep=',', names=restaurant_db_cols, encoding="latin-1")
 pd.set_option("display.max_rows", None, "display.max_columns", None)
@@ -34,7 +42,7 @@ def convert_frame_to_array(restaurant_db_in):
 
 def create_hash_column(restaurant_db_array_in):
     power_value = 256
-    mod_value = 100003
+    mod_value = 104729
     name_hash = []
     address_hash = []
     phone_hash = []
@@ -107,13 +115,15 @@ def find_duplicate_percentage(restaurant_db_array_cluster_wise):
     else:
 
         duplicate_address = duplicate_phone[duplicate_phone.duplicated(['AddressHash'],keep = False)]
-        print(len(restaurant_db_cols))
+        duplicate_address = duplicate_address.sort_values(by=['AddressHash'])
+        #print(len(restaurant_db_cols))
         if duplicate_address.empty:
             number_of_matching_columns = 1
             return number_of_matching_columns,duplicate_phone
             #print("Total percentage of duplicates in this cluster is: ", (len(duplicate_phone)/len(restaurant_db_array_cluster_wise))*100)
         else:
             duplicate_name = duplicate_address[duplicate_address.duplicated(['NameHash'],keep= False)]
+            duplicate_name = duplicate_name.sort_values(by=['NameHash'])
             if duplicate_name.empty:
                 number_of_matching_columns = 2
                 remaining_matched_data = duplicate_phone[duplicate_phone['PhoneHash'].isin(duplicate_address)]
@@ -121,7 +131,7 @@ def find_duplicate_percentage(restaurant_db_array_cluster_wise):
                 return number_of_matching_columns, duplicate_address
                 #print("Total percentage of duplicates in this cluster is: ", (len(duplicate_address)/len(restaurant_db_array_cluster_wise))*100)
             else:
-                duplicate_style = duplicate_name[duplicate_name.duplicated(['StyleHash'],keep= False)]
+                duplicate_style = duplicate_name[duplicate_name.duplicated(subset=['PhoneHash','StyleHash'],keep= False)]
                 if duplicate_style.empty:
                     number_of_matching_columns = 3
                     return number_of_matching_columns, duplicate_name
@@ -187,7 +197,7 @@ print(explained_variance)
 
 Name = 'Arts Deli'#input("Enter the Name of the restaurant: ")
 Address = '12224 Ventura Blvd. Studio City'#input("Enter the address : ")
-Phone = '818-762-1221'#input("Enter the phone number: ")
+Phone = '404-875-0276'#input("Enter the phone number: ")
 Style = 'Delis'#input("Enter the style: ")
 new_restaurant = pd.DataFrame({"Name":[Name], "Address": [Address], "Phone":[Phone],"Style":[Style]})
 new_restaurant['Name'] = new_restaurant['Name'].map(lambda x: re.sub(r'\W+', '', x))
@@ -197,7 +207,7 @@ new_restaurant['Style'] = new_restaurant['Style'].map(lambda x: re.sub(r'\W+', '
 new_restaurant_db_array = convert_frame_to_array(new_restaurant)
 def create_hash_column_test(new_restaurant_in):
     power_value = 256
-    mod_value = 100003
+    mod_value = 283
     name_hash = []
     address_hash = []
     phone_hash = []
@@ -273,17 +283,17 @@ for key in array_frame_cluster:
     if matching_columns ==0:
         print("In Cluster: ",key,"No Matches Found")
     elif matching_columns == 1:
-        print("In Cluster: ",key," Total % of data matched with other records is: ", round((1/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("In Cluster: ",key," Total % of data matched with other records is: ", round((1/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db))*100))
         print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
     elif matching_columns == 2:
-        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((2/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((2/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db))*100))
         print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
     elif matching_columns == 3:
-        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((3/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db)))*100)
+        print("In Cluster: ",key,"Total % of data matched with other records is: ", round((3/len(restaurant_db_cols))*100),"and % of record that are matched over all is",round((len(duplicate_df_obj)/len(restaurant_db))*100))
         print("The matched records are:\n",duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
     else:
         print("In Cluster: ",key,"Total % of data matched with other records is: ", round((4 / len(restaurant_db_cols)) * 100),
-              "and % of record that are matched over all is", round((len(duplicate_df_obj) / len(restaurant_db))) * 100)
+              "and % of record that are matched over all is", round((len(duplicate_df_obj) / len(restaurant_db))* 100) )
         print("The matched records are\n:", duplicate_df_obj.drop(columns = ['NameHash','AddressHash','PhoneHash','StyleHash','DataHash']))
 
 GMM = GaussianMixture(n_components=5).fit(restaurant_db_graph_normalised) #.drop(columns = 'DataHash'))#restaurant_db['DataHash'])max_iter=100, n_init=1, init_params='kmeans'
