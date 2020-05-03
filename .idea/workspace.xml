@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="f21cc267-23b7-41b7-9191-f46e7b8d96a6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartDeduplication.py" beforeDir="false" afterPath="$PROJECT_DIR$/SmartDeduplication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RestaurantList.xls" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RestaurantListComma.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RestaurantTest_Comma.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmartDeduplicationCV.py" beforeDir="false" afterPath="$PROJECT_DIR$/SmartDeduplicationCV.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/kmeans.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/kmeans.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -42,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.SmartDeduplicationCV">
+  <component name="RunManager" selected="Python.SmartDeduplicationLarge">
     <configuration name="SmartDeduplication" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CS256Deduplication" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,6 +90,28 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="SmartDeduplicationLarge" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="CS256Deduplication" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/SmartDeduplicationLarge.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="kmeans" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="CS274_MovieRecommender" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -111,6 +136,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.SmartDeduplicationLarge" />
         <item itemvalue="Python.SmartDeduplicationCV" />
         <item itemvalue="Python.kmeans" />
         <item itemvalue="Python.SmartDeduplication" />
@@ -127,7 +153,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1587640454462</updated>
-      <workItem from="1587640456777" duration="101617000" />
+      <workItem from="1587640456777" duration="128206000" />
     </task>
     <servers />
   </component>
@@ -180,20 +206,41 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/SmartDeduplicationCV.py</url>
-          <line>354</line>
+          <line>422</line>
           <option name="timeStamp" value="118" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/SmartDeduplicationCV.py</url>
-          <line>313</line>
-          <option name="timeStamp" value="119" />
+          <line>190</line>
+          <option name="timeStamp" value="127" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SmartDeduplicationCV.py</url>
+          <line>284</line>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SmartDeduplicationCV.py</url>
+          <line>310</line>
+          <option name="timeStamp" value="135" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SmartDeduplicationCV.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="143" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SmartDeduplicationLarge.py</url>
+          <line>394</line>
+          <option name="timeStamp" value="157" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CS256Deduplication$kmeans.coverage" NAME="kmeans Coverage Results" MODIFIED="1588218373990" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender" />
-    <SUITE FILE_PATH="coverage/CS256Deduplication$SmartDeduplicationCV.coverage" NAME="SmartDeduplicationCV Coverage Results" MODIFIED="1588242449616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/CS256Deduplication$SmartDeduplication.coverage" NAME="SmartDeduplication Coverage Results" MODIFIED="1588193765909" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS256Deduplication$SmartDeduplicationLarge.coverage" NAME="SmartDeduplicationLarge Coverage Results" MODIFIED="1588489721071" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS256Deduplication$kmeans.coverage" NAME="kmeans Coverage Results" MODIFIED="1588478644516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender" />
+    <SUITE FILE_PATH="coverage/CS256Deduplication$SmartDeduplicationCV.coverage" NAME="SmartDeduplicationCV Coverage Results" MODIFIED="1588482684398" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/CS256Deduplication$SmartDeduplication.coverage" NAME="SmartDeduplication Coverage Results" MODIFIED="1588372535450" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
