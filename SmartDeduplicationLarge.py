@@ -8,6 +8,7 @@ from scipy.spatial.distance import cdist
 from collections import Counter, defaultdict
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
+from sklearn.metrics import precision_recall_fscore_support
 
 desired_width=320
 
@@ -202,6 +203,7 @@ def cross_validation_dataset(restaurant_db_array):
                 #Uncomment this section print("\n Kmeans deduplicated data")
                 total_duplicate_df_obj = []
                 predict_label = kmeans_clustering(train_index, test_index)
+
             else:
                 #Uncomment this section print("\n EM deduplicated data")
                 total_duplicate_df_obj = []
@@ -280,6 +282,7 @@ def single_duplicate_checker(predict_label,labels):
 def kmeans_clustering(train_index,test_index):
     kmeans_algo = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised.iloc[train_index])
     labels = kmeans_algo.labels_
+
     # print(labels)
     #predict_df = restaurant_db_graph_normalised.iloc[test_index].copy()
     if len(restaurant_db_graph_normalised.iloc[test_index]) == 2:
@@ -289,6 +292,7 @@ def kmeans_clustering(train_index,test_index):
         single_duplicate_checker(predict_label,labels)
     else:
         predict_label = kmeans_algo.predict(restaurant_db_graph_normalised.iloc[test_index])
+        print(precision_recall_fscore_support(labels, labels, average='macro'))
         return predict_label
 
 
@@ -361,7 +365,7 @@ for key in array_frame_cluster:
 """
 
 
-#cross_validation_dataset(restaurant_db_array)
+cross_validation_dataset(restaurant_db_array)
 
 """   
 cluster_labels = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised.iloc[train_index])

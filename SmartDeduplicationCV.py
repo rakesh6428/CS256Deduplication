@@ -8,6 +8,9 @@ from scipy.spatial.distance import cdist
 from collections import Counter, defaultdict
 from sklearn.decomposition import PCA
 from sklearn.model_selection import KFold
+from sklearn.metrics import davies_bouldin_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score
 
 desired_width=320
 
@@ -186,7 +189,7 @@ restaurant_db_graph = restaurant_db[['NameHash','AddressHash', 'PhoneHash']].cop
 restaurant_db_graph_normalised = restaurant_db_graph.copy()
 restaurant_db_graph_normalised = normalise_data(restaurant_db_graph, restaurant_db_graph_normalised)
 #print(restaurant_db_graph_normalised)
-#find_number_of_cluster()
+find_number_of_cluster()
 
 
 """
@@ -302,8 +305,7 @@ def single_duplicate_checker(predict_label,labels):
 def kmeans_clustering(train_index,test_index):
     kmeans_algo = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised.iloc[train_index])
     labels = kmeans_algo.labels_
-    # print(labels)
-    #predict_df = restaurant_db_graph_normalised.iloc[test_index].copy()
+    #print(davies_bouldin_score(restaurant_db_graph_normalised.iloc[train_index], labels))
     if len(restaurant_db_graph_normalised.iloc[test_index]) == 3:
         predict_array = (restaurant_db_graph_normalised.iloc[test_index]).to_numpy()
         predict_array = predict_array.reshape(1,-1)
@@ -383,7 +385,7 @@ for key in array_frame_cluster:
 """
 
 
-#cross_validation_dataset(restaurant_db_array)
+cross_validation_dataset(restaurant_db_array)
 
 """   
 cluster_labels = KMeans(n_clusters=5).fit(restaurant_db_graph_normalised.iloc[train_index])
