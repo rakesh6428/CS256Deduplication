@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f21cc267-23b7-41b7-9191-f46e7b8d96a6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartDeduplicationCV.py" beforeDir="false" afterPath="$PROJECT_DIR$/SmartDeduplicationCV.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmartDeduplicationLarge.py" beforeDir="false" afterPath="$PROJECT_DIR$/SmartDeduplicationLarge.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/kmeans.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../CS274 Web Intelligence/Final Project/CS274_MovieRecommender/kmeans.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -151,7 +149,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1587640454462</updated>
-      <workItem from="1587640456777" duration="134207000" />
+      <workItem from="1587640456777" duration="134720000" />
     </task>
     <servers />
   </component>
